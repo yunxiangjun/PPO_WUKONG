@@ -29,8 +29,7 @@ class RewardCalculator:
         reward = 0
         self.step_count += 1
         self.combo_count = combo_step
-        # === 攻击激励增强模块 ===
-        # 基础攻击奖励提升（核心修改）
+        # === 攻击激励模块 ===
         boss_damage = self.prev_boss_hp - boss_hp
         if boss_damage > 0:
             time_since_last_attack = time.time() - self.last_attack_time
@@ -41,7 +40,7 @@ class RewardCalculator:
             reward += self.DAMAGE_REWARD * combo_bonus * time_penalty
             self.last_attack_time = time.time()
 
-        # === 动态平衡治疗奖励 ===
+        # === 治疗奖励 ===
         if action_idx == 4:  # 治疗动作
             current_ratio = player_hp / self.max_player_hp
             if HEALTH_COUNT <= 0: reward -= 20
@@ -51,7 +50,7 @@ class RewardCalculator:
             else:
                 heal_bonus = current_ratio * self.HEAL_REWARD_RATIO
                 reward -= heal_bonus
-
+        # === 技能奖励 ===
         if action_idx == 3:
             reward += 30 if player_gunshi == 480 else -30
 
